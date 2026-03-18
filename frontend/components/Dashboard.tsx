@@ -28,7 +28,7 @@ export default function Dashboard() {
 
   if (loading) return (
     <div className="flex items-center justify-center h-screen">
-      <p className="text-gray-400">Loading dashboard...</p>
+      <p className="text-gray-500">Loading dashboard...</p>
     </div>
   )
 
