@@ -173,6 +173,47 @@ Frontend runs at: `http://localhost:3000`
 
 ---
 
+## Deploy on Render
+
+This repo includes a root-level `render.yaml` Blueprint so Render can provision the whole stack from one repository:
+
+- `multi-agent-api` for FastAPI
+- `multi-agent-frontend` for Next.js
+- `multi-agent-db` for PostgreSQL
+
+### Required secrets
+
+Render will ask for these during the first Blueprint deploy:
+
+```env
+OPENAI_API_KEY=
+PINECONE_API_KEY=
+PINECONE_INDEX_NAME=
+TAVILY_API_KEY=
+GROQ_API_KEY=
+```
+
+`DATABASE_URL` is populated automatically from the Render Postgres service.
+
+### Deploy steps
+
+1. Push the repo to GitHub.
+2. In Render, choose `New +` -> `Blueprint`.
+3. Select this repository.
+4. Review the generated services and database.
+5. Enter the required secrets.
+6. Click `Apply`.
+
+### Render-specific behavior
+
+- The backend starts with `uvicorn main:app --host 0.0.0.0 --port $PORT`.
+- The frontend starts with `next start` on `0.0.0.0` and builds the backend URL automatically from Render's external hostname.
+- CSV uploads are written to `/tmp/multi-agent-ai/uploads` in the default free-tier setup.
+- Temporary PDF processing files are stored in `/tmp/multi-agent-ai` and cleaned up after indexing.
+- As of March 19, 2026, Render's free web services do not support persistent disks. If you want CSV uploads to survive restarts and redeploys, upgrade the backend service to a paid instance and attach a disk, then set `UPLOAD_DIR` to that mount path.
+
+---
+
 ## Features
 
 ### Chat (`/chat`)
