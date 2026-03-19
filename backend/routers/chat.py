@@ -1,18 +1,21 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-from database.connection import get_db
-from database.models import QueryLog
-from agents.orchestrator_agent import orchestrate
 import glob
 import os
 from pathlib import Path
 import time
+
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+
+from database.connection import get_db
+from database.models import QueryLog
 
 router = APIRouter()
 UPLOAD_DIR = Path(os.getenv("UPLOAD_DIR", Path(__file__).resolve().parents[1] / "uploads"))
 
 @router.post("/chat")
 async def chat(question: str, db: Session = Depends(get_db)):
+    from agents.orchestrator_agent import orchestrate
+
     start_time = time.time()
 
     csv_files = sorted(glob.glob(str(UPLOAD_DIR / "*.csv")), key=os.path.getmtime)

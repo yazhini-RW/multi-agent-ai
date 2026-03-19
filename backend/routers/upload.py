@@ -5,11 +5,6 @@ from uuid import uuid4
 
 from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, File, UploadFile
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_pinecone import PineconeVectorStore
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from pinecone import Pinecone, ServerlessSpec
 from sqlalchemy.orm import Session
 
 from database.connection import get_db
@@ -34,6 +29,12 @@ def _temp_file_path(filename: str) -> Path:
 
 @router.post("/upload/pdf")
 async def upload_pdf(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    from langchain_community.document_loaders import PyPDFLoader
+    from langchain_huggingface import HuggingFaceEmbeddings
+    from langchain_pinecone import PineconeVectorStore
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
+    from pinecone import Pinecone, ServerlessSpec
+
     temp_path = _temp_file_path(file.filename)
 
     try:

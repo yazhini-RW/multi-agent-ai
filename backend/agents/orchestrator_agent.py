@@ -2,8 +2,6 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from dotenv import load_dotenv
-from .document_agent import query_documents
-from .search_agent import search_web
 import os
 
 load_dotenv()
@@ -38,8 +36,10 @@ def orchestrate(question: str, csv_path: str = None) -> dict:
 
         results = {}
         if "document_agent" in agents_list:
+            from .document_agent import query_documents
             results["document_agent"] = query_documents(question)
         if "search_agent" in agents_list:
+            from .search_agent import search_web
             results["search_agent"] = search_web(question)
         if "analyst_agent" in agents_list and csv_path:
             from .analyst_agent import analyze_csv
