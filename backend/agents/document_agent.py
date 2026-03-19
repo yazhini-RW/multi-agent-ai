@@ -8,18 +8,23 @@ import os
 
 load_dotenv()
 
-embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")   
+_embeddings = None
+
+def get_embeddings():
+    global _embeddings
+    if _embeddings is None:
+        _embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    return _embeddings
 
 def query_documents(question: str) -> str:
-    try:            
+    try:
         index_name = os.getenv("PINECONE_INDEX_NAME")
         vectorstore = PineconeVectorStore.from_existing_index(
             index_name=index_name,
-            embedding=embeddings
+            embedding=get_embeddings()
         )
         docs = vectorstore.similarity_search(question, k=4)
         context = "\n\n".join([doc.page_content for doc in docs])
-        # similarity_search converts your question into a vector 
 
         llm = ChatGroq(
             temperature=0,
