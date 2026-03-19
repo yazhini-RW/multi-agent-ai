@@ -11,7 +11,7 @@ load_dotenv()
 embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")   
 
 def query_documents(question: str) -> str:
-    try:
+    try:            
         index_name = os.getenv("PINECONE_INDEX_NAME")
         vectorstore = PineconeVectorStore.from_existing_index(
             index_name=index_name,
