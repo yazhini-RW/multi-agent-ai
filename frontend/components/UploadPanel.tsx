@@ -17,8 +17,9 @@ export default function UploadPanel() {
       const data = await uploadPDF(file)
       setPdfMessage(data.message)
       setPdfStatus('success')
-    } catch {
-      setPdfMessage('Upload failed. Try again.')
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err)
+      setPdfMessage(`Upload failed: ${msg}`)
       setPdfStatus('error')
     }
   }
@@ -31,8 +32,9 @@ export default function UploadPanel() {
       const data = await uploadCSV(file)
       setCsvMessage(data.message)
       setCsvStatus('success')
-    } catch {
-      setCsvMessage('Upload failed. Try again.')
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err)
+      setCsvMessage(`Upload failed: ${msg}`)
       setCsvStatus('error')
     }
   }

@@ -7,6 +7,7 @@ const apiRoot = (
   (renderApiHostname ? `https://${renderApiHostname}` : 'http://127.0.0.1:8000')
 ).replace(/\/+$/, '')
 const API_BASE = `${apiRoot}/api`
+console.log('[api] API_BASE:', API_BASE)
 
 export const sendMessage = async (question: string) => {
   const response = await axios.post(`${API_BASE}/chat?question=${encodeURIComponent(question)}`)
