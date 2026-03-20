@@ -1,13 +1,6 @@
 import axios from 'axios'
 
-const configuredApiRoot = process.env.NEXT_PUBLIC_API_ROOT
-const renderApiHostname = process.env.NEXT_PUBLIC_API_HOST
-const apiRoot = (
-  configuredApiRoot ||
-  (renderApiHostname ? `https://${renderApiHostname}` : 'http://127.0.0.1:8000')
-).replace(/\/+$/, '')
-const API_BASE = `${apiRoot}/api`
-console.log('[api] API_BASE:', API_BASE)
+const API_BASE = 'https://multi-agent-backend-h9sf.onrender.com/api'
 
 export const sendMessage = async (question: string) => {
   const response = await axios.post(`${API_BASE}/chat?question=${encodeURIComponent(question)}`)
